@@ -36,29 +36,27 @@ app.get("/scrape", function(req, res) {
     // console.log("-------------------------------------")
 
   // First, we grab the body of the html with axios
-  axios.get("https://www.theonion.com").then(function(response) {
+  axios.get("https://www.washingtonpost.com/").then(function(response) {
     // Then, we load that into cheerio and save it to $ for a shorthand selector
-   
-    
+       
     var $ = cheerio.load(response.data);
     
-
     // Now, we grab every h2 within an article tag, and do the following:
-    $("h1").each(function(i, element) {
+    $("h1 .headline").each(function(i, element) {
       // Save an empty result object
       var result = {};
       // Add the text and href of every link, and save them as properties of the result object
+      result.summary = $(this).siblings(".blurb").text();        
       result.title = $(this)
-        .children(".cw4lnv-6")
+        // .children(".cw4lnv-6")
         .text();
 
         console.log("results below")
-        console.log(result.title)
-       result.link = $(this)
-         .children("a")
-         .attr("href");
-
+        result.link = $(this)
+        .children("a")
+        .attr("href");
         
+        console.log(result)
         
 
       // Create a new Article using the `result` object built from scraping
